@@ -13,7 +13,6 @@ public class Conference {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idConf;
 
-
     private String titleConf;
 
     private Integer nbEditionConf;

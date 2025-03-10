@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>REGISTRATION</title>
+
+</head>
+<body>
+<div class="header"></div>
+<div class="main-content">
+    <h3>REGISTRATION</h3>
+
+    <form action="/createParticipant" method="post">
+        <input name="namePart" type="text" placeholder="Your name">
+        <input name="givenNamePart" type="text" placeholder="Your given name">
+        <input name="organismPart" type="text" placeholder="Your organism name">
+        <input name="emailPart" type="text" placeholder="Your email">
+        <input name="zipCodePart" type="text" placeholder="Your zipcode">
+        <input name="addressPart" type="text" placeholder="Your address">
+        <input name="countryPart" type="text" placeholder="Your country">
+        <input name="cityPart" type="text" placeholder="Your city">
+        <input name="passwordPart" type="password" placeholder="password">
+        <input type="submit" value="Create Account">
+    </form>
+</div>
+<div class="footer">
+</div>
+</body>
+</html>

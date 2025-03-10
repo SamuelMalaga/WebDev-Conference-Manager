@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Menu</title>
+
+</head>
+<body>
+<div class="header"></div>
+<div class="main-content">
+    <h3>Features</h3>
+    <ul>
+        <li><a>List of conferences</a></li>
+        <li><a>List of participants</a></li>
+        <li><a>Create a participant account</a></li>
+        <li><a>Create a new conference</a></li>
+        <li><a>Show registration</a></li>
+        <li><a>Register for a conference</a></li>
+    </ul>
+    <h4>Create a conf Temporarily</h4>
+    <form action="conferences/create" method="post">
+        <label>Conf name</label>
+        <input type="text" name="titleConf">
+        <label>Edition number</label>
+        <input type="number" name="nbEditionConf">
+        <label>start date</label>
+        <input type="date" name="dtStartConf">
+        <label>end date</label>
+        <input type="date" name="dtEndConf">
+        <label>URL</label>
+        <input type="text" name="urlWebsiteConf">
+        <button type="submit">Create conf</button>
+    </form>
+</div>
+<div class="footer">
+</div>
+</body>
+</html>
