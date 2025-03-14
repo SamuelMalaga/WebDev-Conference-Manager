@@ -10,10 +10,12 @@
 <div class="main-content">
     <h3>PARTICIPANT</h3>
     <form action="participant/login" method="post">
-        <input name="participantName" type="text" placeholder="Your name">
+        <input name="participantEmail" type="email" placeholder="Your email">
         <input name="password" type="password" placeholder="password">
         <input type="submit" value="login">
     </form>
+    <p th:text="${session.authenticationError}"/>
+    <p th:if="${session.authenticationError}">Authentication Error</p>
     <p>Don't have a account yet? click <a href="participant/register">here</a> to register </p>
 </div>
 <div class="footer">

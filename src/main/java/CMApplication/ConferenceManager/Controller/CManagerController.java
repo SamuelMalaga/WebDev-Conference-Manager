@@ -7,6 +7,8 @@ import CMApplication.ConferenceManager.model.Conference;
 import CMApplication.ConferenceManager.model.Participant;
 import CMApplication.ConferenceManager.model.jpa.ConferenceService;
 import CMApplication.ConferenceManager.model.jpa.ParticipantService;
+import CMApplication.ConferenceManager.utils.CryptographicEncoder;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Controller("/")
 public class CManagerController {
@@ -30,8 +33,12 @@ public class CManagerController {
     @Autowired
     private ParticipantService participantService;
 
+    private CryptographicEncoder cryptographicEncoder;
+
     @RequestMapping("")
-    public String index(Model model){
+    public String index(Model model, HttpSession session){
+        session.setAttribute("loggedIn",false);
+        session.setAttribute("authenticationError",false);
         List<Conference> conferences = conferenceService.getAllConferences();
         model.addAttribute(conferences);
         return "index";
@@ -44,34 +51,37 @@ public class CManagerController {
 
     @RequestMapping("participant/login")
     public String login(
-            @RequestParam(name="participantName") String participantName,
-            @RequestParam(name="password") String participantPassword
+            @RequestParam(name="participantEmail") String participantEmail,
+            @RequestParam(name="password") String participantPassword,
+            HttpSession session,
+            Model model
     ){
 
+        //CryptographicEncoder encoder = new CryptographicEncoder();
+        String testCrypto = cryptographicEncoder.encodeSHA256(participantPassword);
 
-        // ---> Cryptography to store passwords
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-            //String text = "Text to hash, cryptographically.";
 
-            // Change this to UTF-16 if needed
-            md.update(participantPassword.getBytes(StandardCharsets.UTF_8));
-            byte[] digest = md.digest();
+//        System.out.println("Participant name ---->" + participantEmail);
+//        System.out.println("Participant password ---->" + participantPassword);
+//        System.out.println("Participant password hashed ---->" + participantPassword.hashCode());
+//        System.out.println("Participant password SHA256 hashed ---->" + testCrypto);
 
-            String encryptedPassword = String.format("%064x", new BigInteger(1, digest));
-
-            System.out.println("Encrypted password ---->" + encryptedPassword);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+        try{
+            Participant foundParticipant = participantService.findByHashCode(testCrypto);
+            //System.out.println(foundParticipant.getEmailPart());
+            if(!Objects.equals(foundParticipant.getEmailPart(), participantEmail)){
+                throw new Exception();
+            } else {
+                session.setAttribute("loggedIn",true);
+            }
+        } catch (Exception e) {
+            //System.out.println("Not found");
+            session.setAttribute("loggedIn",false);
+            session.setAttribute("authenticationError",true);
+            return "redirect:/participant";
         }
 
-
-
-        System.out.println("Participant name ---->" + participantName);
-        System.out.println("Participant password ---->" + participantPassword);
-        System.out.println("Participant password hashed ---->" + participantPassword.hashCode());
-        return "redirect:/menu";
+        return "redirect:/";
     }
 
     @RequestMapping("participant")
@@ -96,33 +106,47 @@ public class CManagerController {
 
         Date currentDate = new Date();
         // ---> Cryptography to store passwords
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+        String encryptedPassword = cryptographicEncoder.encodeSHA256(passwordPart);
 
-            // Change this to UTF-16 if needed
-            md.update(passwordPart.getBytes(StandardCharsets.UTF_8));
-            byte[] digest = md.digest();
-
-            String encryptedPassword = String.format("%064x", new BigInteger(1, digest));
-
-            System.out.println("Encrypted password ---->" + encryptedPassword);
-
-            participantService.createParticipant(
-                    namePart,
-                    givenNamePart,
-                    organismPart,
-                    zipCodePart,
-                    addressPart,
-                    cityPart,
-                    countryPart,
-                    emailPart,
-                    currentDate,
-                    encryptedPassword
-            );
-
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+        participantService.createParticipant(
+                namePart,
+                givenNamePart,
+                organismPart,
+                zipCodePart,
+                addressPart,
+                cityPart,
+                countryPart,
+                emailPart,
+                currentDate,
+                encryptedPassword
+        );
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("SHA-256");
+//
+//            // Change this to UTF-16 if needed
+//            md.update(passwordPart.getBytes(StandardCharsets.UTF_8));
+//            byte[] digest = md.digest();
+//
+//            String encryptedPassword = String.format("%064x", new BigInteger(1, digest));
+//
+//            System.out.println("Encrypted password ---->" + encryptedPassword);
+//
+//            participantService.createParticipant(
+//                    namePart,
+//                    givenNamePart,
+//                    organismPart,
+//                    zipCodePart,
+//                    addressPart,
+//                    cityPart,
+//                    countryPart,
+//                    emailPart,
+//                    currentDate,
+//                    encryptedPassword
+//            );
+//
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
         return "redirect:/menu";

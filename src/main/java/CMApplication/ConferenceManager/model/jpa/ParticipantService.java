@@ -50,4 +50,10 @@ public class ParticipantService {
 
         return createdParticipant;
     }
+
+    public Participant findByHashCode(String hashCode){
+        Participant foundParticipant = participantRepository.findParticipantByPasswordPartEquals(hashCode);
+
+        return foundParticipant;
+    }
 }
