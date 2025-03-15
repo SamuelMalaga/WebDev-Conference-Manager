@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>Index</title>
-
+    <link th:href="@{/styles/main.css}" rel="stylesheet" />
 </head>
 <body>
-    <div class="header"></div>
-    <div class="main-content">
-        <h3>Index</h3>
-        <div>Login section</div>
-        <a href="participant"> Click here to go to login page</a>
-        <div class="conferences-section">
-            <p>List all the conferences</p>
-        </div>
+<div class="header">
+    <ul class="navigationMenu">
+        <li class="menuLink"><a class="active" href="#home">Home</a></li>
+        <li class="menuLink"><a href="/conferences">Conferences</a></li>
+        <li class="menuLink"><a href="#contact">Registration</a></li>
+        <li class="menuLink" style="float:right"><a href="login">Login</a></li>
+    </ul>
+</div>
+<div class="main-content">
+    <div class="conferences-section">
+        <h3>Just the index Page</h3>
     </div>
-    <p th:text="${session.loggedIn}"/>
-    <div class="footer">
-    </div>
+</div>
+<div class="footer">
+    <p>© Copyright 2030 by The Conference Management Site!</p>
+</div>
 </body>
 </html>

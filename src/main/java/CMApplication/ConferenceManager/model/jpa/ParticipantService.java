@@ -1,7 +1,9 @@
 package CMApplication.ConferenceManager.model.jpa;
 
 
+import CMApplication.ConferenceManager.model.Conference;
 import CMApplication.ConferenceManager.model.Participant;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,9 @@ public class ParticipantService {
 
     @Autowired
     private ParticipantRepository participantRepository;
+
+    @Autowired
+    private ConferenceRepository conferenceRepository;
 
     public Optional<Participant> findById(Long participantId){
 
@@ -55,5 +60,23 @@ public class ParticipantService {
         Participant foundParticipant = participantRepository.findParticipantByPasswordPartEquals(hashCode);
 
         return foundParticipant;
+    }
+
+    @Transactional
+    public void enrollParticipantInConference(Long participantId, Long conferenceId){
+        System.out.println("Transactional");
+        System.out.println("Participant id" + participantId);
+        System.out.println("conference id" + conferenceId);
+
+        Participant participant = participantRepository.findById(participantId).orElseThrow();
+        Conference conference = conferenceRepository.findById(conferenceId).orElseThrow();
+
+        System.out.println("Found Participant id" + participant.getIdPart());
+        System.out.println("Found conference id" + conference.getIdConf());
+
+        participant.getParticipantConferences().add(conference);
+        conference.getConferenceParticipants().add(participant);
+
+        participantRepository.save(participant);
     }
 }

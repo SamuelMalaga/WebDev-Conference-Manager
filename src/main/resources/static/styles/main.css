@@ -1,0 +1,56 @@
+/*.header{*/
+/*    border: 1px solid black;*/
+/*    height: 50px;*/
+/*}*/
+body{
+    margin: 0px;
+    font-family: Ubuntu;
+}
+
+.main-content{
+    padding: 4px;
+    padding-bottom: 60px;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+.navigationMenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.menuLink {
+    float: left;
+}
+
+.menuLink a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+.menuLink a:hover {
+    background-color: #111;
+}
+
+.active {
+    background-color: #04AA6D;
+}
+
+.login {
+    background-color: darkblue;
+}

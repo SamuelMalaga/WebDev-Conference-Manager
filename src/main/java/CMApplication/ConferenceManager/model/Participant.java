@@ -4,6 +4,8 @@ package CMApplication.ConferenceManager.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="participants")
@@ -14,6 +16,10 @@ public class Participant {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long idPart;
+
+    public Long getIdPart() {
+        return idPart;
+    }
 
     private String namePart;
 
@@ -29,13 +35,28 @@ public class Participant {
 
     private String countryPart;
 
+    @Column(unique = true)
     private String emailPart;
 
     private Date dtRegistration;
 
     private String passwordPart;
 
+    @ManyToMany
+    @JoinTable(
+            name="registration",
+            joinColumns = @JoinColumn(name = "participant_id"),
+            inverseJoinColumns = @JoinColumn(name = "conference_id")
+    )
+    private Set<Conference> participantConferences = new HashSet<>();
 
+    public Set<Conference> getParticipantConferences() {
+        return participantConferences;
+    }
+
+    public void setParticipantConferences(Set<Conference> participantConferences) {
+        this.participantConferences = participantConferences;
+    }
 
     public String getPasswordPart() {
         return passwordPart;

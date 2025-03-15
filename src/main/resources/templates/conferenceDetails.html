@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="header">
+    <ul class="navigationMenu">
+        <li class="menuLink"><a href="/">Home</a></li>
+        <li class="menuLink"><a class="active" href="/conferences">Conferences</a></li>
+        <li class="menuLink"><a href="/contact">Registration</a></li>
+        <li class="menuLink" style="float:right"><a href="/login">Login</a></li>
+    </ul>
+</div>
+<div class="main-content">
+    <h2>Conference details | CONF ID -> <p th:text="${selectedConference.get().titleConf}"></p> </h2>
+
+    <h2>Participants</h2>
+    <li th:each="participant : ${selectedConference.get().getConferenceParticipants()}">
+        <p th:text="${participant.namePart}"/>
+    </li>
+    <p>Register to this conference here</p>
+    <form action="/conferences/registerParticipant" method="post">-->
+        <input type="text" name="confId" th:value="${selectedConference.get().idConf}">
+        <input type="text" name="participantId" th:value="${session.loggedParticipant.idPart}">
+        <input  type="submit" value="Register">
+    </form>
+</div>
+<div class="footer">
+    <p>© Copyright 2030 by The Conference Management Site!</p>
+</div>
+</body>
+</html>

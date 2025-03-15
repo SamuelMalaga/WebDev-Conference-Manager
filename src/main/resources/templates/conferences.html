@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="header">
+    <ul class="navigationMenu">
+        <li class="menuLink"><a href="/">Home</a></li>
+        <li class="menuLink"><a class="active" href="#contact">Conferences</a></li>
+        <li class="menuLink"><a href="#contact">Registration</a></li>
+        <li class="menuLink" style="float:right"><a href="login">Login</a></li>
+    </ul>
+</div>
+<div class="main-content">
+    <div class="conferences-section">
+
+        <h3>Latest conferences</h3>
+        <p th:text="${session.loggedParticipant.namePart}"/>
+        <p th:text="${session.loggedParticipant.getIdPart()}"/>
+        <ul>
+            <li th:each="avaliableConference : ${avaliableConferences}">
+                <p th:text="${avaliableConference.titleConf}"/>
+                <p th:text="${avaliableConference.idConf}"/>
+                <a th:href="@{conferences/{idConf}(idConf=${avaliableConference.idConf})}">See details</a>
+<!--                <p th:text="${session.loggedParticipant.namePart}"/>-->
+<!--                <p th:text="${session.loggedParticipant.idPart}"/>-->
+<!--                th:if="${session.loggedIn}"-->
+<!--                <form action="conferences/registerParticipant" method="post">-->
+<!--                    <input type="text" name="confId" th:value="${avaliableConference.idConf}">-->
+<!--                    <input type="text" name="participantId" th:value="${session.loggedParticipant.getIdPart()}">-->
+<!--                    <input  type="submit" value="Register">-->
+<!--                </form>-->
+
+            </li>
+        </ul>
+        <a href="conferenceCreate">Click here to create your conference</a>
+    </div>
+</div>
+<div class="footer">
+    <p>© Copyright 2030 by The Conference Management Site!</p>
+</div>
+</body>
+</html>

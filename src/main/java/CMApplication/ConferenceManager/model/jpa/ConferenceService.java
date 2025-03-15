@@ -1,12 +1,11 @@
 package CMApplication.ConferenceManager.model.jpa;
 
 import CMApplication.ConferenceManager.model.Conference;
+import CMApplication.ConferenceManager.model.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ConferenceService {
@@ -37,5 +36,17 @@ public class ConferenceService {
 
         return createdConference;
     }
+
+    public Optional<Conference> findById(Long conferenceId){
+        return conferenceRepository.findById(conferenceId);
+    }
+
+    public Set<Participant> getAllParticipants(
+            Long conferenceId
+    ){
+        Optional<Conference> selectedConference = conferenceRepository.findById(conferenceId);
+        return selectedConference.get().getConferenceParticipants();
+    }
+
 
 }

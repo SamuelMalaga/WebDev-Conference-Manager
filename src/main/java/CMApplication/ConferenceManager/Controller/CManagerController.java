@@ -1,28 +1,23 @@
 package CMApplication.ConferenceManager.Controller;
-import java.security.MessageDigest;
-import java.nio.charset.StandardCharsets;
-import java.math.BigInteger;
 
 import CMApplication.ConferenceManager.model.Conference;
 import CMApplication.ConferenceManager.model.Participant;
+import CMApplication.ConferenceManager.model.Theme;
 import CMApplication.ConferenceManager.model.jpa.ConferenceService;
 import CMApplication.ConferenceManager.model.jpa.ParticipantService;
+import CMApplication.ConferenceManager.model.jpa.ThemeService;
 import CMApplication.ConferenceManager.utils.CryptographicEncoder;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 @Controller("/")
 public class CManagerController {
@@ -33,15 +28,26 @@ public class CManagerController {
     @Autowired
     private ParticipantService participantService;
 
-    private CryptographicEncoder cryptographicEncoder;
+    @Autowired
+    private ThemeService themeService;
+
+    private CryptographicEncoder cryptographicEncoder = new CryptographicEncoder();
 
     @RequestMapping("")
     public String index(Model model, HttpSession session){
+
         session.setAttribute("loggedIn",false);
         session.setAttribute("authenticationError",false);
+        return "index";
+    }
+
+    @RequestMapping("conferences")
+    public String conferences(Model model, HttpSession httpSession){
+        List<Conference> avaliableConferences = conferenceService.getAllConferences();
+        model.addAttribute("avaliableConferences", avaliableConferences);
         List<Conference> conferences = conferenceService.getAllConferences();
         model.addAttribute(conferences);
-        return "index";
+        return "conferences";
     }
 
     @RequestMapping("menu")
@@ -61,31 +67,27 @@ public class CManagerController {
         String testCrypto = cryptographicEncoder.encodeSHA256(participantPassword);
 
 
-//        System.out.println("Participant name ---->" + participantEmail);
-//        System.out.println("Participant password ---->" + participantPassword);
-//        System.out.println("Participant password hashed ---->" + participantPassword.hashCode());
-//        System.out.println("Participant password SHA256 hashed ---->" + testCrypto);
-
         try{
             Participant foundParticipant = participantService.findByHashCode(testCrypto);
-            //System.out.println(foundParticipant.getEmailPart());
             if(!Objects.equals(foundParticipant.getEmailPart(), participantEmail)){
                 throw new Exception();
             } else {
+                session.setAttribute("loggedParticipant", foundParticipant);
                 session.setAttribute("loggedIn",true);
+                System.out.println("LoggedIn");
             }
         } catch (Exception e) {
             //System.out.println("Not found");
             session.setAttribute("loggedIn",false);
             session.setAttribute("authenticationError",true);
-            return "redirect:/participant";
+            return "redirect:/login";
         }
 
         return "redirect:/";
     }
 
-    @RequestMapping("participant")
-    public String participant(){return "participant";}
+    @RequestMapping("login")
+    public String participant(){return "loginPage";}
 
     @RequestMapping("participant/register")
     public String registration(){return "registration";}
@@ -101,14 +103,15 @@ public class CManagerController {
             @RequestParam(name = "cityPart", required = true) String cityPart,
             @RequestParam(name = "countryPart", required = true) String countryPart,
             @RequestParam(name = "emailPart", required = true) String emailPart,
-            @RequestParam(name = "passwordPart", required = true) String passwordPart
+            @RequestParam(name = "passwordPart", required = true) String passwordPart,
+            HttpSession httpSession
     ){
 
         Date currentDate = new Date();
         // ---> Cryptography to store passwords
         String encryptedPassword = cryptographicEncoder.encodeSHA256(passwordPart);
 
-        participantService.createParticipant(
+        Participant createdParticipant = participantService.createParticipant(
                 namePart,
                 givenNamePart,
                 organismPart,
@@ -120,36 +123,21 @@ public class CManagerController {
                 currentDate,
                 encryptedPassword
         );
-//        try {
-//            MessageDigest md = MessageDigest.getInstance("SHA-256");
-//
-//            // Change this to UTF-16 if needed
-//            md.update(passwordPart.getBytes(StandardCharsets.UTF_8));
-//            byte[] digest = md.digest();
-//
-//            String encryptedPassword = String.format("%064x", new BigInteger(1, digest));
-//
-//            System.out.println("Encrypted password ---->" + encryptedPassword);
-//
-//            participantService.createParticipant(
-//                    namePart,
-//                    givenNamePart,
-//                    organismPart,
-//                    zipCodePart,
-//                    addressPart,
-//                    cityPart,
-//                    countryPart,
-//                    emailPart,
-//                    currentDate,
-//                    encryptedPassword
-//            );
-//
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
+
+        httpSession.setAttribute("loggedParticipant",createdParticipant);
 
 
-        return "redirect:/menu";
+        return "redirect:/participant/details";
+    }
+
+
+    @RequestMapping("conferenceCreate")
+    public String createConferencePage(
+            Model model
+    ){
+        List<Theme> themes = themeService.getAllThemes();
+        model.addAttribute("conferenceThemes",themes);
+        return "conferenceCreate";
     }
 
     @RequestMapping("conferences/create")
@@ -162,11 +150,12 @@ public class CManagerController {
     ) throws ParseException {
         //Format 2025-03-07
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD", Locale.FRENCH);
+        Conference createdConference = null;
         try {
             Date validatedDtStartConf = dateFormat.parse(dtStartConf);
             Date validatedDtEndConf = dateFormat.parse(dtEndConf);
 
-            conferenceService.createConference(
+            createdConference = conferenceService.createConference(
                     titleConf,
                     nbEditionConf,
                     validatedDtStartConf,
@@ -176,7 +165,41 @@ public class CManagerController {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return "redirect:/menu";
+        return "redirect:/conferences/"+createdConference.getIdConf();
     }
 
+    @RequestMapping("conferences/registerParticipant")
+    public String registerParticipantToConference(
+            @RequestParam(name = "confId") Long idConf,
+            @RequestParam(name = "participantId") Long idParticipant
+    ){
+        Optional<Conference> conference = conferenceService.findById(idConf);
+        Optional<Participant> participant = participantService.findById(idParticipant);
+
+        System.out.println(idConf);
+        System.out.println(idParticipant);
+
+
+        participantService.enrollParticipantInConference(idParticipant,idConf);
+
+        System.out.println("registerParticipant");
+
+        return "redirect:/conferences";
+    }
+
+    @RequestMapping("/participant/details")
+    public String participantDetails(
+    ){
+        return "participantDetails";
+    }
+
+    @RequestMapping("/conferences/{confId}")
+    public String conferenceDetails(
+            Model model,
+            @PathVariable Long confId
+    ){
+        Optional<Conference> selectedConference = conferenceService.findById(confId);
+        model.addAttribute("selectedConference",selectedConference);
+        return "conferenceDetails";
+    }
 }

@@ -3,6 +3,8 @@ package CMApplication.ConferenceManager.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -22,6 +24,27 @@ public class Conference {
     private Date dtEndConf;
 
     private String urlWebSiteConf;
+
+    @ManyToMany(mappedBy = "participantConferences")
+    private Set<Participant> conferenceParticipants = new HashSet<>();
+
+    @ManyToMany(mappedBy ="themeConferences" )
+    private Set<Theme> conferenceThemes = new HashSet<>();
+
+    @ManyToMany(mappedBy = "activityConferences")
+    private Set<Activity> conferenceActivities = new HashSet<>();
+
+    public Set<Activity> getConferenceActivities() {
+        return conferenceActivities;
+    }
+
+    public void setConferenceParticipants(Set<Participant> conferenceParticipants) {
+        this.conferenceParticipants = conferenceParticipants;
+    }
+
+    public Set<Participant> getConferenceParticipants() {
+        return conferenceParticipants;
+    }
 
     public Long getIdConf() {
         return idConf;

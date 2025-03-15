@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>PARTICIPANT</title>
-
+    <link th:href="@{/styles/main.css}" rel="stylesheet" />
 </head>
 <body>
-<div class="header"></div>
+<div class="header">
+    <ul class="navigationMenu">
+        <li class="menuLink"><a href="/">Home</a></li>
+        <li class="menuLink"><a href="#contact">Conferences</a></li>
+        <li class="menuLink"><a href="#contact">Registration</a></li>
+        <li class="menuLink" style="float:right"><a class="active" href="login">Login</a></li>
+    </ul>
+</div>
 <div class="main-content">
-    <h3>PARTICIPANT</h3>
+    <h3>Login</h3>
     <form action="participant/login" method="post">
         <input name="participantEmail" type="email" placeholder="Your email">
         <input name="password" type="password" placeholder="password">
         <input type="submit" value="login">
     </form>
-    <p th:text="${session.authenticationError}"/>
+<!--    <p th:text="${session.authenticationError}"/>-->
     <p th:if="${session.authenticationError}">Authentication Error</p>
     <p>Don't have a account yet? click <a href="participant/register">here</a> to register </p>
 </div>
 <div class="footer">
+    <p>© Copyright 2030 by The Conference Management Site!</p>
 </div>
 </body>
 </html>
