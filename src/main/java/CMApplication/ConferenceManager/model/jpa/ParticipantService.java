@@ -71,8 +71,8 @@ public class ParticipantService {
         Participant participant = participantRepository.findById(participantId).orElseThrow();
         Conference conference = conferenceRepository.findById(conferenceId).orElseThrow();
 
-        System.out.println("Found Participant id" + participant.getIdPart());
-        System.out.println("Found conference id" + conference.getIdConf());
+        //System.out.println("Found Participant id" + participant.getIdPart());
+        //System.out.println("Found conference id" + conference.getIdConf());
 
         participant.getParticipantConferences().add(conference);
         conference.getConferenceParticipants().add(participant);

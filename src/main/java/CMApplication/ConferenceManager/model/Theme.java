@@ -17,6 +17,18 @@ public class Theme {
     @Column(nullable = false, unique = true)
     private String nameTheme;
 
+    public Long getThemeId() {
+        return themeId;
+    }
+
+    public String getNameTheme() {
+        return nameTheme;
+    }
+
+    public Set<Conference> getThemeConferences() {
+        return themeConferences;
+    }
+
     @ManyToMany
     @JoinTable(
             name="on_themes",

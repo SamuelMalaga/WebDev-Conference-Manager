@@ -1,11 +1,10 @@
 package CMApplication.ConferenceManager.Controller;
 
+import CMApplication.ConferenceManager.model.Activity;
 import CMApplication.ConferenceManager.model.Conference;
 import CMApplication.ConferenceManager.model.Participant;
 import CMApplication.ConferenceManager.model.Theme;
-import CMApplication.ConferenceManager.model.jpa.ConferenceService;
-import CMApplication.ConferenceManager.model.jpa.ParticipantService;
-import CMApplication.ConferenceManager.model.jpa.ThemeService;
+import CMApplication.ConferenceManager.model.jpa.*;
 import CMApplication.ConferenceManager.utils.CryptographicEncoder;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +30,23 @@ public class CManagerController {
     @Autowired
     private ThemeService themeService;
 
+    @Autowired
+    private ActivityService activityService;
+
+    @Autowired
+    private ThemeChoiceService themeChoiceService;
+
+    @Autowired
+    private ActivityChoiceService activityChoiceService;
+
     private CryptographicEncoder cryptographicEncoder = new CryptographicEncoder();
 
     @RequestMapping("")
     public String index(Model model, HttpSession session){
 
-        session.setAttribute("loggedIn",false);
-        session.setAttribute("authenticationError",false);
+
+//        session.setAttribute("loggedIn",false);
+//        session.setAttribute("authenticationError",false);
         return "index";
     }
 
@@ -83,6 +92,18 @@ public class CManagerController {
             return "redirect:/login";
         }
 
+        return "redirect:/";
+    }
+
+    @RequestMapping("participant/logout")
+    public String logout(
+            Model model,
+            HttpSession httpSession
+    ){
+        System.out.println("Logout");
+        httpSession.setAttribute("loggedIn", false);
+        httpSession.setAttribute("authenticationError",false);
+        httpSession.setAttribute("loggedParticipant", null);
         return "redirect:/";
     }
 
@@ -136,7 +157,9 @@ public class CManagerController {
             Model model
     ){
         List<Theme> themes = themeService.getAllThemes();
+        List<Activity> activities = activityService.getAllActivities();
         model.addAttribute("conferenceThemes",themes);
+        model.addAttribute("conferenceActivities", activities );
         return "conferenceCreate";
     }
 
@@ -146,8 +169,11 @@ public class CManagerController {
             @RequestParam(name="nbEditionConf") Integer nbEditionConf,
             @RequestParam(name="dtStartConf") String dtStartConf,
             @RequestParam(name="dtEndConf") String dtEndConf,
-            @RequestParam(name = "urlWebsiteConf") String urlWebsiteConf
+            @RequestParam(name = "urlWebsiteConf") String urlWebsiteConf,
+            @RequestParam(name ="themes") ArrayList<Long> conferenceThemesIds,
+            @RequestParam(name = "activities") ArrayList<Long> conferenceActivitiesIds
     ) throws ParseException {
+        System.out.println(conferenceThemesIds);
         //Format 2025-03-07
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD", Locale.FRENCH);
         Conference createdConference = null;
@@ -160,7 +186,9 @@ public class CManagerController {
                     nbEditionConf,
                     validatedDtStartConf,
                     validatedDtEndConf,
-                    urlWebsiteConf
+                    urlWebsiteConf,
+                    conferenceThemesIds,
+                    conferenceActivitiesIds
             );
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -171,7 +199,9 @@ public class CManagerController {
     @RequestMapping("conferences/registerParticipant")
     public String registerParticipantToConference(
             @RequestParam(name = "confId") Long idConf,
-            @RequestParam(name = "participantId") Long idParticipant
+            @RequestParam(name = "participantId") Long idParticipant,
+            @RequestParam(name = "themeIds") List<Long> themeIds,
+            @RequestParam(name = "activityIds") List<Long> activityIds
     ){
         Optional<Conference> conference = conferenceService.findById(idConf);
         Optional<Participant> participant = participantService.findById(idParticipant);
@@ -179,12 +209,22 @@ public class CManagerController {
         System.out.println(idConf);
         System.out.println(idParticipant);
 
+        //Register the theme choices
+        for(Long themeId: themeIds){
+            themeChoiceService.createThemeChoice(themeId, idConf, idParticipant);
+        }
 
+        //Register the activity choices
+        for(Long activityId: activityIds){
+            activityChoiceService.createActivityChoice(activityId, idConf, idParticipant);
+        }
+
+        //Enroll Participant in a conference
         participantService.enrollParticipantInConference(idParticipant,idConf);
 
         System.out.println("registerParticipant");
 
-        return "redirect:/conferences";
+        return "redirect:/conferences/" + idConf ;
     }
 
     @RequestMapping("/participant/details")
@@ -202,4 +242,30 @@ public class CManagerController {
         model.addAttribute("selectedConference",selectedConference);
         return "conferenceDetails";
     }
+
+
+    @RequestMapping("/conferences/{confId}/register")
+    public String conferenceRegister(
+            Model model,
+            @PathVariable Long confId
+    ){
+        Optional<Conference> selectedConference = conferenceService.findById(confId);
+        model.addAttribute("selectedConference",selectedConference);
+
+        return "conferenceRegistration";
+    }
+
+    @RequestMapping("participant/createThemeChoice")
+    public String participantCreateThemeChoices(
+            @RequestParam(name="participantId") Long participantId,
+            @RequestParam(name="conferenceId") Long conferenceId,
+            @RequestParam(name = "themeIds") List<Long> themeIds
+    ){
+        for(Long themeId: themeIds){
+            themeChoiceService.createThemeChoice(themeId, conferenceId, participantId);
+        }
+
+        return "redirect:/conferences/" + conferenceId ;
+    }
+
 }

@@ -9,34 +9,37 @@
 <div class="header">
     <ul class="navigationMenu">
         <li class="menuLink"><a href="/">Home</a></li>
-        <li class="menuLink"><a class="active" href="#contact">Conferences</a></li>
-        <li class="menuLink"><a href="#contact">Registration</a></li>
-        <li class="menuLink" style="float:right"><a href="login">Login</a></li>
+        <li class="menuLink"><a class="active" href="#">Conferences</a></li>
+        <li class="menuLink" style="float:right"><a th:if="${!session.loggedIn}"  href="login">Login</a><a th:if="${session.loggedIn}"  href="/participant/details">MyAccount</a></li>
+        <li class="menuLink" style="float:right"><a th:if="${session.loggedIn}"  href="/participant/logout">Log out</a></li>
     </ul>
 </div>
 <div class="main-content">
     <div class="conferences-section">
+        <h3>Avaliable conferences</h3>
+<!--        <p th:text="${session.loggedParticipant.namePart}"/>-->
+<!--        <p th:text="${session.loggedParticipant.getIdPart()}"/>-->
+        <div class="conferencesTable">
+            <input type="text" id="filterInput" onkeyup="myFunction()" placeholder="Search for names..">
 
-        <h3>Latest conferences</h3>
-        <p th:text="${session.loggedParticipant.namePart}"/>
-        <p th:text="${session.loggedParticipant.getIdPart()}"/>
-        <ul>
-            <li th:each="avaliableConference : ${avaliableConferences}">
-                <p th:text="${avaliableConference.titleConf}"/>
-                <p th:text="${avaliableConference.idConf}"/>
-                <a th:href="@{conferences/{idConf}(idConf=${avaliableConference.idConf})}">See details</a>
-<!--                <p th:text="${session.loggedParticipant.namePart}"/>-->
-<!--                <p th:text="${session.loggedParticipant.idPart}"/>-->
-<!--                th:if="${session.loggedIn}"-->
-<!--                <form action="conferences/registerParticipant" method="post">-->
-<!--                    <input type="text" name="confId" th:value="${avaliableConference.idConf}">-->
-<!--                    <input type="text" name="participantId" th:value="${session.loggedParticipant.getIdPart()}">-->
-<!--                    <input  type="submit" value="Register">-->
-<!--                </form>-->
-
-            </li>
-        </ul>
-        <a href="conferenceCreate">Click here to create your conference</a>
+            <table id="entityDisplayTable">
+                <tr class="header">
+                    <th style="width:30%;">Conference Title</th>
+                    <th style="width:10%;">Edition</th>
+                    <th style="width:20%;">Date Start</th>
+                    <th style="width:20%;">Date End</th>
+                    <th style="width:20%;">Details</th>
+                </tr>
+                <tr th:each="avaliableConference : ${avaliableConferences}">
+                    <td th:text="${avaliableConference.titleConf}"></td>
+                    <td th:text="${avaliableConference.nbEditionConf}"></td>
+                    <td th:text="${#dates.format(avaliableConference.dtStartConf, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${#dates.format(avaliableConference.dtEndConf, 'dd-MM-yyyy')}"></td>
+                    <td><a th:href="@{conferences/{idConf}(idConf=${avaliableConference.idConf})}">See details</a></td>
+                </tr>
+            </table>
+        </div>
+        <a  class="customButton" href="conferenceCreate">Click here to create your conference</a>
     </div>
 </div>
 <div class="footer">

@@ -9,10 +9,10 @@
 <body>
 <div class="header">
   <ul class="navigationMenu">
-    <li class="menuLink"><a  href="#home">Home</a></li>
-    <li class="menuLink"><a href="#contact">Conferences</a></li>
-    <li class="menuLink"><a  class="active" href="#contact">Registration</a></li>
-    <li class="menuLink" style="float:right"><a href="/login">Login</a></li>
+    <li class="menuLink"><a  href="/">Home</a></li>
+    <li class="menuLink"><a href="/conferences">Conferences</a></li>
+    <li class="menuLink" style="float:right"><a th:if="${!session.loggedIn}"  href="login">Login</a><a class="active" th:if="${session.loggedIn}"  href="/participant/details">MyAccount</a></li>
+    <li class="menuLink" style="float:right"><a th:if="${session.loggedIn}"  href="/participant/logout">Log out</a></li>
   </ul>
 </div>
 <div class="main-content">

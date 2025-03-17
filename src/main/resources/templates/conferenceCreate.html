@@ -9,9 +9,9 @@
 <div class="header">
   <ul class="navigationMenu">
     <li class="menuLink"><a href="/">Home</a></li>
-    <li class="menuLink"><a class="active" href="#contact">Conferences</a></li>
-    <li class="menuLink"><a href="#contact">Registration</a></li>
-    <li class="menuLink" style="float:right"><a href="login">Login</a></li>
+    <li class="menuLink"><a class="active" href="/conferences">Conferences</a></li>
+    <li class="menuLink" style="float:right"><a th:if="${!session.loggedIn}"  href="login">Login</a><a th:if="${session.loggedIn}"  href="/participant/details">MyAccount</a></li>
+    <li class="menuLink" style="float:right"><a th:if="${session.loggedIn}"  href="/participant/logout">Log out</a></li>
   </ul>
 </div>
 <div class="main-content">
@@ -28,6 +28,16 @@
       <input type="date" name="dtEndConf">
       <label>URL</label>
       <input type="text" name="urlWebsiteConf">
+      <label for="themes">Choose a conference theme or themes:</label>
+      <select name="themes" id="themes" multiple>
+        <option th:each="conferenceTheme : ${conferenceThemes}" th:value="${conferenceTheme.getThemeId()}" th:text="${conferenceTheme.getNameTheme()}">
+        </option>
+      </select>
+      <label for="activities">Choose the activities for the conference:</label>
+      <select name="activities" id="activities" multiple>
+        <option th:each="conferenceActivity : ${conferenceActivities}" th:value="${conferenceActivity.getActivityId()}" th:text="${conferenceActivity.getNameActivity()}">
+        </option>
+      </select>
       <button type="submit">Create conf</button>
     </form>
   </div>

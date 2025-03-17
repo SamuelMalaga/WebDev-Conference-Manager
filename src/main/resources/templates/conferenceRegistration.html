@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="header">
+    <ul class="navigationMenu">
+        <li class="menuLink"><a href="/">Home</a></li>
+        <li class="menuLink"><a class="active" href="/conferences">Conferences</a></li>
+        <li class="menuLink" style="float:right"><a th:if="${!session.loggedIn}"  href="login">Login</a><a th:if="${session.loggedIn}"  href="/participant/details">MyAccount</a></li>
+        <li class="menuLink" style="float:right"><a th:if="${session.loggedIn}"  href="/participant/logout">Log out</a></li>
+    </ul>
+</div>
+<div class="main-content">
+    <div class="conferenceDetailsContainer">
+        <div class="entityCard">
+            <h1 th:text="${selectedConference.get().titleConf}"/>
+            <h2>Registration</h2>
+            <p class="title" th:text="${selectedConference.get().nbEditionConf}"/>
+            <p>Conference Web Site</p>
+            <p class="title" th:text="${selectedConference.get().urlWebSiteConf}"/>
+            <form action="/conferences/registerParticipant" method="post">
+                <div class="themeSelectionContainer">
+                    <h3>Select one or more themes</h3>
+                    <select name="themeIds" id="themeIds" multiple>
+                        <option th:each="conferenceTheme : ${selectedConference.get().getConferenceThemes()}" th:value="${conferenceTheme.getThemeId()}" th:text="${conferenceTheme.getNameTheme()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="activitiesSelectionContainer">
+                    <h3>Select one or more Activities</h3>
+                    <select name="activityIds" id="activityIds" multiple>
+                        <option
+                                th:each="activity : ${selectedConference.get().getConferenceActivities()}"
+                                th:value="${activity.getActivityId()}"
+                                th:text="${activity.getNameActivity()}
+                                +
+                                ' | Price '
+                                +
+                                ${activity.getPriceActivity()}
+                                +
+                                ' | CompanionPrice '
+                                +
+                                ${activity.getPriceActCompanion()}
+                        ">
+                        </option>
+                    </select>
+                </div>
+                <div class="companionNumberSelectionContainer">
+                    <h3>Select the number of companions</h3>
+                    <input type="number" placeholder="Number of companions" min="0">
+                </div>
+                <input  type="text" name="participantId" th:value="${session.loggedParticipant.idPart}">
+                <input type="text" name="confId" th:value="${selectedConference.get().idConf}">
+                <p><button class="cardButton" type="submit">Register for this conference</button></p>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <p>© Copyright 2030 by The Conference Management Site!</p>
+</div>
+</body>
+</html>

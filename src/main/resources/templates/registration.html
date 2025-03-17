@@ -9,26 +9,66 @@
 <body>
 <div class="header">
     <ul class="navigationMenu">
-        <li class="menuLink"><a  href="#home">Home</a></li>
-        <li class="menuLink"><a href="#contact">Conferences</a></li>
-        <li class="menuLink"><a  class="active" href="#contact">Registration</a></li>
-        <li class="menuLink" style="float:right"><a href="/login">Login</a></li>
+        <li class="menuLink"><a  href="/">Home</a></li>
+        <li class="menuLink"><a href="/conferences">Conferences</a></li>
+        <li class="menuLink" style="float:right"><a th:if="${!session.loggedIn}"  href="login">Login</a><a th:if="${session.loggedIn}"  href="/participant/details">MyAccount</a></li>
+        <li class="menuLink" style="float:right"><a th:if="${session.loggedIn}"  href="/participant/logout">Log out</a></li>
     </ul>
 </div>
 <div class="main-content">
-    <h3>Create Your Account</h3>
+    <div class="registrationFormContainer">
+            <form action="/createParticipant" method="post">
+                <div class="container">
+                    <h1>Registration</h1>
+                    <p>Please fill in this form to create a participant account.</p>
+                    <hr>
 
+                    <label for="namePart"><b>Name</b></label>
+                    <input name="namePart" type="text" placeholder="Your name" id="namePart" required>
+
+                    <label for="givenNamePart"><b>Given Name</b></label>
+                    <input name="givenNamePart" type="text" placeholder="Your given name" id="givenNamePart" required>
+
+                    <label for="organismPart"><b>Org. Name</b></label>
+                    <input name="organismPart" type="text" placeholder="Your organism name" id="organismPart" required>
+
+                    <label for="email"><b>Email</b></label>
+                    <input name="emailPart" type="text" placeholder="Your email" id="email" required>
+
+                    <label for="zipCodePart"><b>Zip Code</b></label>
+                    <input name="zipCodePart" type="text" placeholder="Your zipcode" id="zipCodePart" required>
+
+                    <label for="addressPart"><b>Address</b></label>
+                    <input name="addressPart" type="text" placeholder="Your address" id="addressPart" required>
+
+                    <label for="countryPart"><b>Country</b></label>
+                    <input name="countryPart" type="text" placeholder="Your country" id="countryPart" required>
+
+                    <label for="cityPart"><b>City</b></label>
+                    <input name="cityPart" type="text" placeholder="Your city" id="cityPart" required>
+
+                    <label for="psw"><b>Password</b></label>
+                    <input name="passwordPart" type="password" placeholder="password" id="psw" required>
+
+                    <hr>
+                    <button type="submit" class="registerbtn">Create Account</button>
+                </div>
+                <div class="container signin">
+                    <p>Already have a account? Click <a href="/login">here</a> to log in.</p>
+                </div>
+            </form>
+    </div>
     <form action="/createParticipant" method="post">
-        <input name="namePart" type="text" placeholder="Your name">
-        <input name="givenNamePart" type="text" placeholder="Your given name">
-        <input name="organismPart" type="text" placeholder="Your organism name">
-        <input name="emailPart" type="text" placeholder="Your email">
-        <input name="zipCodePart" type="text" placeholder="Your zipcode">
-        <input name="addressPart" type="text" placeholder="Your address">
-        <input name="countryPart" type="text" placeholder="Your country">
-        <input name="cityPart" type="text" placeholder="Your city">
-        <input name="passwordPart" type="password" placeholder="password">
-        <input type="submit" value="Create Account">
+<!--        <input name="namePart" type="text" placeholder="Your name">-->
+<!--        <input name="givenNamePart" type="text" placeholder="Your given name">-->
+<!--        <input name="organismPart" type="text" placeholder="Your organism name">-->
+<!--        <input name="emailPart" type="text" placeholder="Your email">-->
+<!--        <input name="zipCodePart" type="text" placeholder="Your zipcode">-->
+<!--        <input name="addressPart" type="text" placeholder="Your address">-->
+<!--        <input name="countryPart" type="text" placeholder="Your country">-->
+<!--        <input name="cityPart" type="text" placeholder="Your city">-->
+<!--        <input name="passwordPart" type="password" placeholder="password">-->
+<!--        <input type="submit" value="Create Account">-->
     </form>
 </div>
 <div class="footer">

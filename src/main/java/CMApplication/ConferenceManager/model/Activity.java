@@ -31,4 +31,54 @@ public class Activity {
             inverseJoinColumns = @JoinColumn(name = "conference_id")
     )
     private Set<Conference> activityConferences = new HashSet<>();
+
+    public Long getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
+    }
+
+    public String getNameActivity() {
+        return nameActivity;
+    }
+
+    public void setNameActivity(String nameActivity) {
+        this.nameActivity = nameActivity;
+    }
+
+    public BigDecimal getPriceActivity() {
+        return priceActivity;
+    }
+
+    public void setPriceActivity(BigDecimal priceActivity) {
+        this.priceActivity = priceActivity;
+    }
+
+    public BigDecimal getPriceActCompanion() {
+        return priceActCompanion;
+    }
+
+    public void setPriceActCompanion(BigDecimal priceActCompanion) {
+        this.priceActCompanion = priceActCompanion;
+    }
+
+    public Integer getNbMaxParticipants() {
+        return nbMaxParticipants;
+    }
+
+    public void setNbMaxParticipants(Integer nbMaxParticipants) {
+        this.nbMaxParticipants = nbMaxParticipants;
+    }
+
+    public Set<Conference> getActivityConferences() {
+        return activityConferences;
+    }
+
+    public void setActivityConferences(Set<Conference> activityConferences) {
+        this.activityConferences = activityConferences;
+    }
+
+
 }

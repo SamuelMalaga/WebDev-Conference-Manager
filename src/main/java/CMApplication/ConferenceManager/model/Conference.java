@@ -34,14 +34,6 @@ public class Conference {
     @ManyToMany(mappedBy = "activityConferences")
     private Set<Activity> conferenceActivities = new HashSet<>();
 
-    public Set<Activity> getConferenceActivities() {
-        return conferenceActivities;
-    }
-
-    public void setConferenceParticipants(Set<Participant> conferenceParticipants) {
-        this.conferenceParticipants = conferenceParticipants;
-    }
-
     public Set<Participant> getConferenceParticipants() {
         return conferenceParticipants;
     }
@@ -88,5 +80,21 @@ public class Conference {
 
     public void setUrlWebSiteConf(String urlWebSiteConf) {
         this.urlWebSiteConf = urlWebSiteConf;
+    }
+
+    public Set<Theme> getConferenceThemes() {
+        return conferenceThemes;
+    }
+
+    public void setConferenceThemes(Set<Theme> conferenceThemes) {
+        this.conferenceThemes = conferenceThemes;
+    }
+
+    public void setConferenceParticipants(Set<Participant> conferenceParticipants) {
+        this.conferenceParticipants = conferenceParticipants;
+    }
+
+    public Set<Activity> getConferenceActivities() {
+        return conferenceActivities;
     }
 }
