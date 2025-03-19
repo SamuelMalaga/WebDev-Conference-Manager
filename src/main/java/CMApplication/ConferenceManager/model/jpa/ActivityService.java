@@ -2,6 +2,7 @@ package CMApplication.ConferenceManager.model.jpa;
 
 import CMApplication.ConferenceManager.model.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,6 @@ public class ActivityService {
     private ActivityRepository activityRepository;
 
     public List<Activity> getAllActivities(){
-        return activityRepository.findAll();
+        return activityRepository.findAll(Sort.by("nameActivity"));
     }
 }

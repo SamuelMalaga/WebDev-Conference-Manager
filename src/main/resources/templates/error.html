@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Index</title>
+  <link th:href="@{/styles/main.css}" rel="stylesheet" />
+</head>
+<body>
+  <div class="error-container">
+    <h1> Oh my! Some error must have occured. </h1>
+    <p th:text="${session.ErrorMessage}"/>
+
+<!--    <a href="/">-->
+<!--      Go Back to Home-->
+<!--    </a>-->
+    <small>Have you tried logged in? Session expires in 30 min. <a href="/">Click here to go back!</a></small>
+  </div>
+</body>
+</html>

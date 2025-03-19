@@ -6,6 +6,7 @@ import CMApplication.ConferenceManager.model.Participant;
 import CMApplication.ConferenceManager.model.Theme;
 import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,7 +24,7 @@ public class ConferenceService {
     private ParticipantRepository participantRepository;
 
     public List<Conference> getAllConferences(){
-        return conferenceRepository.findAll();
+        return conferenceRepository.findAll(Sort.by("dtStartConf"));
     }
 
     public Conference createConference(
