@@ -1,7 +1,4 @@
-/*.header{*/
-/*    border: 1px solid black;*/
-/*    height: 50px;*/
-/*}*/
+
 body{
     margin: 0px;
     font-family: Ubuntu;
@@ -102,7 +99,7 @@ body{
 }
 
 /* Full-width input fields */
-input[type=text], input[type=password] {
+input[type=text], input[type=number], input[type=date],input[type=password] {
     width: 100%;
     padding: 15px;
     margin: 5px 0 22px 0;
@@ -111,7 +108,7 @@ input[type=text], input[type=password] {
     background: #f1f1f1;
 }
 
-input[type=text]:focus, input[type=password]:focus {
+input[type=text]:focus,input[type=number],input[type=date], input[type=password]:focus {
     background-color: #ddd;
     outline: none;
 }
@@ -156,6 +153,7 @@ a {
     max-width: 500px;
     margin: auto;
     text-align: center;
+    padding: 5px;
 }
 
 .title {
@@ -176,11 +174,6 @@ a {
     /*font-size: 18px;*/
 }
 
-/*a {*/
-/*    text-decoration: none;*/
-/*    font-size: 22px;*/
-/*    color: black;*/
-/*}*/
 
 button:hover, a:hover {
     opacity: 0.7;
@@ -211,17 +204,26 @@ details[open] summary {
 
 
 /*------------------Menu Cards*/
+.hiddenTag{
+    all: unset;
+}
 
 /* Float four columns side by side */
 .column {
-    float: left;
-    width: 33%;
-    padding: 0 10px;
+    flex: 1; /* Makes all columns equal in width */
+    min-width: 200px; /* Prevents columns from becoming too small */
+    max-width: 300px; /* Ensures they don't stretch too much */
+    display: flex;
 }
 
 /* Remove extra left and right margins, due to padding in columns */
-.row {margin: 0 -5px;
-padding-bottom: 30px}
+.row {
+    display: flex;
+    justify-content: center; /* Centers cards horizontally */
+    gap: 10px; /* Adds space between cards */
+    flex-wrap: wrap; /* Ensures responsiveness */
+    padding-bottom: 30px;
+}
 
 /* Clear floats after the columns */
 .row:after {
@@ -232,7 +234,12 @@ padding-bottom: 30px}
 
 /* Style the counter cards */
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+    flex: 1; /* Makes all cards equal in height */
+    display: flex;
+    flex-direction: column; /* Keeps text centered */
+    justify-content: center; /* Centers text vertically */
+    align-items: center; /* Centers text horizontally */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 16px;
     text-align: center;
     background-color: #f1f1f1;
@@ -240,10 +247,13 @@ padding-bottom: 30px}
 
 /* Responsive columns - one column layout (vertical) on small screens */
 @media screen and (max-width: 600px) {
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
     .column {
         width: 100%;
-        display: block;
-        margin-bottom: 20px;
+        max-width: 100%;
     }
 }
 
@@ -257,4 +267,53 @@ padding-bottom: 30px}
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+}
+
+/*----------------------------- Create conference Form*/
+
+.conferences-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.createConferenceForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center elements horizontally */
+    justify-content: center; /* Center elements vertically if needed */
+}
+
+
+.createConferenceForm div {
+    width: 500px; /* Set a fixed width for uniformity */
+    max-width: 100%; /* Ensures responsiveness */
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers elements inside */
+    box-sizing: border-box; /* Prevents padding from affecting width */
+}
+
+.createConferenceForm button{
+    width: 500px;
+}
+
+.createConferenceForm div input,
+.createConferenceForm div select {
+    width: 100%; /* Make them take the full width of the parent div */
+    max-width: 100%;
+    padding: 8px; /* Adds some spacing for better design */
+    box-sizing: border-box;
+}
+
+.registerInConferenceForm div input,
+.registerInConferenceForm div select {
+    width: 100%; /* Make them take the full width of the parent div */
+    max-width: 100%;
+    padding: 8px; /* Adds some spacing for better design */
+    box-sizing: border-box;
 }

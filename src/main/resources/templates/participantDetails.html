@@ -17,7 +17,36 @@
 </div>
 <div class="main-content">
   <h2>Participant Information</h2>
-  <p th:text="${session.loggedParticipant.namePart}">
+  <div class="participantInformationContainer">
+    <div class="entityCard">
+      <h1>Account details</h1>
+      <p class="title">Participant Name</p>
+      <p th:text="${session.loggedParticipant.namePart}"></p>
+      <p class="title">Participant Given Name</p>
+      <p th:text="${session.loggedParticipant.getGivenNamePart()}"></p>
+      <p class="title">Org. Participant</p>
+      <p th:text="${session.loggedParticipant.getOrganismPart()}"></p>
+      <p class="title">Participant Location</p>
+      <p th:text="${session.loggedParticipant.getCountryPart()
+      +
+      ', '
+      +
+      session.loggedParticipant.getCityPart()
+      +
+      ' - '
+      +
+      session.loggedParticipant.getZipCodePart()
+      +
+      ', '
+      +
+      session.loggedParticipant.getAddressPart()}"></p>
+      <p class="title">Email participant</p>
+      <p th:text="${session.loggedParticipant.getEmailPart()}"></p>
+      <p class="title">Date of registration</p>
+
+      <p th:text="${#dates.format(session.loggedParticipant.getDtRegistration(), 'dd-MM-yyyy HH:MM')}"></p>
+    </div>
+  </div>
 </div>
 <div class="footer">
   <p>© Copyright 2030 by The Conference Management Site!</p>

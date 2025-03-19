@@ -17,28 +17,41 @@
 <div class="main-content">
   <div class="conferences-section">
     <h3>Register conference</h3>
-    <form action="conferences/create" method="post">
-      <label>Conf name</label>
-      <input type="text" name="titleConf">
-      <label>Edition number</label>
-      <input type="number" name="nbEditionConf">
-      <label>start date</label>
-      <input type="date" name="dtStartConf">
-      <label>end date</label>
-      <input type="date" name="dtEndConf">
-      <label>URL</label>
-      <input type="text" name="urlWebsiteConf">
-      <label for="themes">Choose a conference theme or themes:</label>
-      <select name="themes" id="themes" multiple>
-        <option th:each="conferenceTheme : ${conferenceThemes}" th:value="${conferenceTheme.getThemeId()}" th:text="${conferenceTheme.getNameTheme()}">
-        </option>
-      </select>
-      <label for="activities">Choose the activities for the conference:</label>
-      <select name="activities" id="activities" multiple>
-        <option th:each="conferenceActivity : ${conferenceActivities}" th:value="${conferenceActivity.getActivityId()}" th:text="${conferenceActivity.getNameActivity()}">
-        </option>
-      </select>
-      <button type="submit">Create conf</button>
+    <form class="createConferenceForm" action="conferences/create" method="post">
+      <div>
+        <label for="titleConf">Conference name</label>
+        <input type="text" id="titleConf" name="titleConf">
+      </div>
+      <div>
+        <label for="editionNumber">Edition number</label>
+        <input type="number" id="editionNumber" name="nbEditionConf" min="0" value="1">
+      </div>
+      <div>
+        <label for="startDate">Start date</label>
+        <input type="date" id="startDate" name="dtStartConf">
+      </div>
+      <div><label for="endDate">End date</label>
+        <input type="date" id="endDate" name="dtEndConf">
+      </div>
+      <div>
+        <label for="confUrl">URL</label>
+        <input type="text" id="confUrl" name="urlWebsiteConf">
+      </div>
+      <div>
+        <label for="themes">Choose a conference theme or themes:</label>
+        <select name="themes" id="themes" multiple>
+          <option th:each="conferenceTheme : ${conferenceThemes}" th:value="${conferenceTheme.getThemeId()}" th:text="${conferenceTheme.getNameTheme()}">
+          </option>
+        </select>
+      </div>
+      <div>
+        <label for="activities">Choose the activities for the conference:</label>
+        <select name="activities" id="activities" multiple>
+          <option th:each="conferenceActivity : ${conferenceActivities}" th:value="${conferenceActivity.getActivityId()}" th:text="${conferenceActivity.getNameActivity()}">
+          </option>
+        </select>
+      </div>
+      <button class="registerbtn" type="submit">Create conf</button>
     </form>
   </div>
 </div>

@@ -17,33 +17,31 @@
 <div class="main-content">
     <div class="conferences-section">
         <h3>Avaliable conferences</h3>
-<!--        <p th:text="${session.loggedParticipant.namePart}"/>-->
-<!--        <p th:text="${session.loggedParticipant.getIdPart()}"/>-->
         <div class="conferencesTable">
-            <input type="text" id="filterInput" onkeyup="myFunction()" placeholder="Search for names..">
-
+            <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for conference names">
             <table id="entityDisplayTable">
                 <tr class="header">
                     <th style="width:30%;">Conference Title</th>
                     <th style="width:10%;">Edition</th>
                     <th style="width:20%;">Date Start</th>
                     <th style="width:20%;">Date End</th>
-                    <th style="width:20%;">Details</th>
+                    <th th:if="${session.loggedIn}" style="width:20%;">Details</th>
                 </tr>
                 <tr th:each="avaliableConference : ${avaliableConferences}">
                     <td th:text="${avaliableConference.titleConf}"></td>
                     <td th:text="${avaliableConference.nbEditionConf}"></td>
                     <td th:text="${#dates.format(avaliableConference.dtStartConf, 'dd-MM-yyyy')}"></td>
                     <td th:text="${#dates.format(avaliableConference.dtEndConf, 'dd-MM-yyyy')}"></td>
-                    <td><a th:href="@{conferences/{idConf}(idConf=${avaliableConference.idConf})}">See details</a></td>
+                    <td><a th:if="${session.loggedIn}" th:href="@{conferences/{idConf}(idConf=${avaliableConference.idConf})}">See details</a></td>
                 </tr>
             </table>
         </div>
-        <a  class="customButton" href="conferenceCreate">Click here to create your conference</a>
+        <a th:if="${session.loggedIn}" class="customButton" href="conferenceCreate">Click here to create your conference</a>
     </div>
 </div>
 <div class="footer">
     <p>© Copyright 2030 by The Conference Management Site!</p>
 </div>
+<script th:src="@{/scripts/commonScripts.js}"></script>
 </body>
 </html>

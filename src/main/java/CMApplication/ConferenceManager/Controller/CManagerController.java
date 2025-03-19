@@ -44,7 +44,11 @@ public class CManagerController {
     @RequestMapping("")
     public String index(Model model, HttpSession session){
 
-
+        ;
+        if(null == session.getAttribute("loggedIn")){
+            System.out.println("loggedInNulo");
+            session.setAttribute("loggedIn",false);
+        }
 //        session.setAttribute("loggedIn",false);
 //        session.setAttribute("authenticationError",false);
         return "index";
@@ -201,7 +205,8 @@ public class CManagerController {
             @RequestParam(name = "confId") Long idConf,
             @RequestParam(name = "participantId") Long idParticipant,
             @RequestParam(name = "themeIds") List<Long> themeIds,
-            @RequestParam(name = "activityIds") List<Long> activityIds
+            @RequestParam(name = "activityIds") List<Long> activityIds,
+            HttpSession session
     ){
         Optional<Conference> conference = conferenceService.findById(idConf);
         Optional<Participant> participant = participantService.findById(idParticipant);
@@ -236,9 +241,20 @@ public class CManagerController {
     @RequestMapping("/conferences/{confId}")
     public String conferenceDetails(
             Model model,
-            @PathVariable Long confId
+            @PathVariable Long confId,
+            HttpSession session
     ){
         Optional<Conference> selectedConference = conferenceService.findById(confId);
+        Participant participant = (Participant) session.getAttribute("loggedParticipant");
+
+        //Check if participant is already registered
+        if(conferenceService.checkIfParticipantIsRegistered(confId,participant.getIdPart())){
+            model.addAttribute("registeredParticipant", true);
+        } else {
+            model.addAttribute("registeredParticipant", false);
+        }
+//        System.out.println(conferenceService.checkIfParticipantIsRegistered(confId,participant.getIdPart()));
+
         model.addAttribute("selectedConference",selectedConference);
         return "conferenceDetails";
     }

@@ -5,6 +5,7 @@
     <title>Index</title>
     <link th:href="@{/styles/main.css}" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
 <div class="header">
@@ -23,7 +24,7 @@
             <p class="title" th:text="${selectedConference.get().nbEditionConf}"/>
             <p>Conference Web Site</p>
             <p class="title" th:text="${selectedConference.get().urlWebSiteConf}"/>
-            <form action="/conferences/registerParticipant" method="post">
+            <form class="registerInConferenceForm" action="/conferences/registerParticipant" method="post">
                 <div class="themeSelectionContainer">
                     <h3>Select one or more themes</h3>
                     <select name="themeIds" id="themeIds" multiple>
@@ -52,11 +53,15 @@
                 </div>
                 <div class="companionNumberSelectionContainer">
                     <h3>Select the number of companions</h3>
-                    <input type="number" placeholder="Number of companions" min="0">
+                    <input id="companionNumber" value="0" type="number" placeholder="Number of companions" min="0">
                 </div>
-                <input  type="text" name="participantId" th:value="${session.loggedParticipant.idPart}">
-                <input type="text" name="confId" th:value="${selectedConference.get().idConf}">
-                <p><button class="cardButton" type="submit">Register for this conference</button></p>
+                <div class="totalAmountOfRegistrationContainer">
+                    <h3>Total amount of registration</h3>
+                    <p id="registrationAmount"> 0 €</p>
+                </div>
+                <input style="display: none" type="text" name="participantId" th:value="${session.loggedParticipant.idPart}" readonly/>
+                <input style="display: none" type="text" name="confId" th:value="${selectedConference.get().idConf}" readonly/>
+                <p><button class="customButton" type="submit">Register for this conference</button></p>
             </form>
         </div>
     </div>
@@ -64,5 +69,6 @@
 <div class="footer">
     <p>© Copyright 2030 by The Conference Management Site!</p>
 </div>
+<script th:src="@{/scripts/commonScripts.js}"></script>
 </body>
 </html>

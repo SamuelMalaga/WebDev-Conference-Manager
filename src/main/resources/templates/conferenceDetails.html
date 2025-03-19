@@ -22,9 +22,9 @@
             <p>Conference Edition</p>
             <p class="title" th:text="${selectedConference.get().nbEditionConf}"/>
             <p>Conference Start Date</p>
-            <p class="title" th:text="${selectedConference.get().dtStartConf}"/>
+            <p class="title" th:text="${#dates.format(selectedConference.get().dtStartConf, 'dd-MM-yyyy')}"/>
             <p>Conference End Date</p>
-            <p class="title" th:text="${selectedConference.get().dtEndConf}"/>
+            <p class="title" th:text="${#dates.format(selectedConference.get().dtEndConf, 'dd-MM-yyyy')}"/>
             <p>Conference Web Site</p>
             <p class="title" th:text="${selectedConference.get().urlWebSiteConf}"/>
             <details>
@@ -45,7 +45,7 @@
                     <p th:text="${activity.getNameActivity()}"/>
                 </li>
             </details>
-            <a class="customButton" th:href="@{/conferences/{confId}/register(confId=${selectedConference.get().idConf})}">Click Here to register</a>
+            <a class="customButton" th:if="${!registeredParticipant}" th:href="@{/conferences/{confId}/register(confId=${selectedConference.get().idConf})}">Click Here to register</a>
         </div>
     </div>
 </div>

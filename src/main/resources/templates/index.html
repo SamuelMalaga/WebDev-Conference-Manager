@@ -18,33 +18,28 @@
     <div class="conferences-section">
         <h3>Features</h3>
         <div class="row">
-            <a href="/conferences">
+            <a class="hiddenTag" href="/conferences">
                 <div class="column">
                     <div class="card">
                         <p class="title">List of conferences</p>
                     </div>
                 </div>
             </a>
-<!--            <div class="column">-->
-<!--                <div class="card">-->
-<!--                    <p class="title">List of participants</p>-->
-<!--                </div>-->
-<!--            </div>-->
-            <a href="conferenceCreate">
+            <a class="hiddenTag" th:if="${session.loggedIn}" href="conferenceCreate">
                 <div class="column">
                     <div class="card">
                         <p class="title">Create a conference</p>
                     </div>
                 </div>
             </a>
-            <a th:if="${session.loggedIn}" href="/participant/details">
+            <a class="hiddenTag" th:if="${session.loggedIn}" href="/participant/details">
                 <div class="column">
                     <div class="card">
-                        <p class="title">My registration details</p>
+                        <p class="title">Registration details</p>
                     </div>
                 </div>
             </a>
-            <a th:if="${!session.loggedIn}" href="/participant/register">
+            <a class="hiddenTag" th:if="${!session.loggedIn}" href="/participant/register">
                 <div class="column">
                     <div class="card">
                         <p class="title">Create a account</p>
@@ -52,13 +47,6 @@
                 </div>
             </a>
         </div>
-<!--        <div class="row">-->
-<!--            <div class="column">-->
-<!--                <div class="card">-->
-<!--                    <p class="title">My registration details</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
 </div>
 <div class="footer">

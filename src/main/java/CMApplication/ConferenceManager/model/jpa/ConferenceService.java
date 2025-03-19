@@ -19,6 +19,8 @@ public class ConferenceService {
     private ThemeRepository themeRepository;
     @Autowired
     private ActivityRepository activityRepository;
+    @Autowired
+    private ParticipantRepository participantRepository;
 
     public List<Conference> getAllConferences(){
         return conferenceRepository.findAll();
@@ -74,6 +76,17 @@ public class ConferenceService {
     ){
         Optional<Conference> selectedConference = conferenceRepository.findById(conferenceId);
         return selectedConference.get().getConferenceParticipants();
+    }
+
+    public Boolean checkIfParticipantIsRegistered(
+            Long conferenceId,
+            Long participantId
+    ){
+        Conference foundConference = conferenceRepository.getReferenceById(conferenceId);
+        Optional<Participant> foundParticipant = participantRepository.findById(participantId);
+        ArrayList<Participant> participants = new ArrayList<>(foundConference.getConferenceParticipants());
+
+        return participants.contains(foundParticipant.get());
     }
 
 
